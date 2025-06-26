@@ -1,0 +1,33 @@
+<!-- todo/templates/todo/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo List</title>
+    <style>
+        body { font-family: Arial; margin: 30px; }
+        .completed { text-decoration: line-through; color: gray; }
+    </style>
+</head>
+<body>
+    <h1>Todo List</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Enter a new task" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <a href="{% url 'toggle_complete' task.id %}" class="{% if task.completed %}completed{% endif %}">
+                    {{ task.title }}
+                </a>
+                <a href="{% url 'delete_task' task.id %}" style="color:red;">[Delete]</a>
+            </li>
+        {% empty %}
+            <li>No tasks yet!</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
