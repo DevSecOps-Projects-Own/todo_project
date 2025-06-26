@@ -20,13 +20,14 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready"
+          --health-cmd="pg_isready -U postgres"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -36,8 +37,16 @@ jobs:
       - name: Install Docker Compose
         run: sudo apt-get update && sudo apt-get install -y docker-compose
 
-      - name: Build containers
+      - name: Build Docker containers
         run: docker-compose build
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          echo "Waiting for PostgreSQL to become available..."
+          until docker-compose exec -T db pg_isready -U postgres; do
+            echo "Waiting..."
+            sleep 2
+          done
 
       - name: Run migrations
         run: docker-compose run web python manage.py migrate
@@ -45,5 +54,5 @@ jobs:
       - name: Run tests
         run: docker-compose run web python manage.py test
 
-      - name: Run flake8
-        run: docker-compose run web flake8 . --exclude=migrations --ignore=E501
+      - name: Run flake8 linting
+        run: docker-compose run web flake8 . --exclude=migrations,__pycache__,.env --ignore=E501
