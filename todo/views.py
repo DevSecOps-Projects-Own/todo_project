@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Task
 
+
 def index(request):
     tasks = Task.objects.all()
     if request.method == "POST":
@@ -10,10 +11,12 @@ def index(request):
             return redirect('/')
     return render(request, 'todo/index.html', {'tasks': tasks})
 
+
 def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
     return redirect('/')
+
 
 def toggle_complete(request, task_id):
     task = Task.objects.get(id=task_id)
