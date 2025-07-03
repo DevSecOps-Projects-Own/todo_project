@@ -50,11 +50,42 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
+    - name: Docker tag
+      id: version
+      run: |
+        VERSION=v$(date +"%Y%m%d%H%M%S")
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    # - name: Build Docker Image
+    #   run: |
+    #     docker build . -t vigneshvicky97/django-todo:${{ env.VERSION }} 
+
+    # - name: Push Docker Image
+    #   run: |
+    #     docker push vigneshvicky97/django-todo:${{ env.VERSION }}
+
+
     - name: Build and Push Multi-Platform Image
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/django-todo:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/django-todo:${{ env.VERSION }} 
         platforms: linux/amd64,linux/arm64
+
+    - name: Update K8s Manifests
+      run: |
+        cat deploy/deploy.yaml
+        sed -i "s|image: vigneshvicky97/django-todo:.*|image: vigneshvicky97/django-todo:${{ env.VERSION }}|g" k8s/django-deployment.yaml
+        cat k8s/django-deployment.yaml
+
+    - name: Commit the changes
+      run: |
+        git config --global user.email "<>"
+        git config --global user.name "GitHub Actions Bot"
+        git add k8s/django-deployment.yaml
+        git commit -m "Update k8s/django-deployment.yaml with new image version - ${{ env.VERSION }}"
+        git remote set-url origin https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/vigneshs-dev/DevSecOps-Projects-Own/todo_project.git
+        git push origin master
+
