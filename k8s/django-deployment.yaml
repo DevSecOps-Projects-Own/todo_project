@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: django
-          image: django-todo:latest
+          image: vigneshvicky97/django-todo:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
