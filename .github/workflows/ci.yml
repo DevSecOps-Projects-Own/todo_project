@@ -71,7 +71,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/django-todo:${{ env.VERSION }} 
+        tags: vigneshvicky97/django-todo:${{ env.VERSION }} 
         platforms: linux/amd64,linux/arm64
 
     - name: Update K8s Manifests
@@ -87,6 +87,8 @@ jobs:
         git add k8s/django-deployment.yaml
         git commit -m "Update k8s/django-deployment.yaml with new image version - $VERSION"
         git remote set-url origin https://github.com/vigneshs-dev/DevSecOps-Projects-Own/todo_project.git
+        # git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/vigneshs-dev/DevSecOps-Projects-Own.git main
+        git remote set-url origin https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/vigneshs-dev/DevSecOps-Projects-Own/todo_project.git
         git push origin main
 
 
