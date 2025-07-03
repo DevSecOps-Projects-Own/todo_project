@@ -76,7 +76,7 @@ jobs:
 
     - name: Update K8s Manifests
       run: |
-        cat deploy/deploy.yaml
+        cat k8s/django-deployment.yaml
         sed -i "s|image: vigneshvicky97/django-todo:.*|image: vigneshvicky97/django-todo:${{ env.VERSION }}|g" k8s/django-deployment.yaml
         cat k8s/django-deployment.yaml
 
