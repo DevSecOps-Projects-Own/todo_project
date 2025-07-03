@@ -25,10 +25,10 @@ kubectl get po | grep django | grep -v 'Running' | awk '{print $1}' | while read
   printf "Django pod %s is ready.\n" "$pod"
 done
 
-# apply migrations
-echo "Applying Django migrations..."
-kubectl exec -it $(kubectl get pods --selector=app=django -o jsonpath='{.items[0].metadata.name}') -- python manage.py migrate  
-echo "Django migrations applied successfully."
+# # apply migrations
+# echo "Applying Django migrations..."
+# kubectl exec -it $(kubectl get pods --selector=app=django -o jsonpath='{.items[0].metadata.name}') -- python manage.py migrate  
+# echo "Django migrations applied successfully."
 
 # Port-forward the Django service
 echo "Port-forwarding Django service..."
