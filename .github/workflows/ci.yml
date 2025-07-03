@@ -87,5 +87,5 @@ jobs:
         git add k8s/django-deployment.yaml
         git commit -m "Update k8s/django-deployment.yaml with new image version - ${{ env.VERSION }}"
         git remote set-url origin https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/vigneshs-dev/DevSecOps-Projects-Own/todo_project.git
-        git push origin master
+        git push origin main
 
