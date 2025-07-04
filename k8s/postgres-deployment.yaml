@@ -31,9 +31,11 @@ spec:
                 secretKeyRef:
                   name: django-secrets
                   key: DB_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata  # 👈 NEW: Set PGDATA to a subdirectory
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql/data  # 👈 Mount volume as usual
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
