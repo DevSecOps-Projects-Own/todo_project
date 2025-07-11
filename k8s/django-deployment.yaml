@@ -21,7 +21,7 @@ spec:
           command: ['sh', '-c', 'until nc -z postgres 5432; do echo waiting for postgres; sleep 2; done;']
     
         - name: migrate
-          image: vigneshvicky97/django-todo:v20250711094729
+          image: vigneshvicky97/django-todo:v20250711095320
           command: ["python", "manage.py", "migrate"]
           env:
             - name: SECRET_KEY
@@ -61,7 +61,7 @@ spec:
                   key: DB_PORT
       containers:
         - name: django
-          image: vigneshvicky97/django-todo:v20250711094729
+          image: vigneshvicky97/django-todo:v20250711095320
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
